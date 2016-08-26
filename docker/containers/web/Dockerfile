@@ -7,9 +7,6 @@ RUN apt-get update -qq && apt-get -y install apache2-utils curl
 # Set our working directory inside the image
 WORKDIR $ROOT_DIR
 
-# create log directory
-RUN mkdir log
-
 # copy our Nginx config
 COPY $DOCKER_ROOT/containers/web/nginx.conf /etc/nginx/conf.d/default.conf
 
