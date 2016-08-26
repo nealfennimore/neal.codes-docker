@@ -9,7 +9,7 @@ ENV NODE_VERSION $NODE_VERSION
 WORKDIR $ROOT_DIR
 
 # Update the OS packages list and will install some libraries
-RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git
+RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git python
 
 # Install NVM and node
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.4/install.sh | bash \
