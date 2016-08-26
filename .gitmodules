@@ -1,0 +1,4 @@
+[submodule "app"]
+	path = app
+	url = https://github.com/nealfennimore/neal.codes-app.git
+	branch = master
