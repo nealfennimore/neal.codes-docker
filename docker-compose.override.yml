@@ -1,0 +1,11 @@
+app:
+
+  # map our application source code, in full, to the application root of our container
+  # volumes:
+  #   - ./app:/home/app
+
+# web:
+#
+#   # use whatever volumes are configured for the app container
+#   volumes_from:
+#     - app
