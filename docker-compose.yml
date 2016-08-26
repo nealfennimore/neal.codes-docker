@@ -13,7 +13,7 @@ app:
 
   # expose the port we configured Puma to bind to
   ports:
-    - "8888"
+    - "4545"
 
 # service configuration for our web server
 web:
