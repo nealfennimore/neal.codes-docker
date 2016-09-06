@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
-
-BUILD_DIR=".docker"
-TEMP_DIR="$BUILD_DIR/tmp"
-APP_ENV="docker/docker-application.env"
+source utils.sh
 
 # Export environment variables so that they're accessible to envsubst
-export $(cat $APP_ENV | xargs)
+export $(getEnvVars)
+
+TEMP_DIR="$DOCKER_ROOT/tmp"
 
 # Concatenate a string of all environment names with colon separators
-env_names=`grep -Eo '[A-Z|_]+' $APP_ENV | awk '{print "$"$0}' | tr '\n' ':'`
+env_names=`getEnvVars | grep -Eo '[A-Z|_]+' | awk '{print "$"$0}' | tr '\n' ':'`
 env_names=${env_names%?} # Remove trailing ':'
 
 # Make holding dir for environment substition
@@ -32,6 +31,12 @@ for file in $TEMP_DIR/containers/**/*; do
     # Make executable if a shell script
     if [[ $new_file =~ .sh$ ]]; then
         chmod +x $new_file
+    fi
+
+    # Update new file and then skip to next file
+    if [[ $new_file =~ .env$ ]]; then
+        cat $file > $new_file
+        continue
     fi
 
     # Substitute variables to final file
