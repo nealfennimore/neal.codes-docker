@@ -1,11 +1,28 @@
-app:
+version: "2"
+services:
+    app:
+        # use the Dockerfile next to this file
+        build:
+            context: .
+            # build with Dockerfile
+            dockerfile: ./.docker/containers/app/Dockerfile
 
-  # map our application source code, in full, to the application root of our container
-  # volumes:
-  #   - ./app:/home/app
+        # sources environment variable configuration for our app
+        env_file:
+            - ./docker/docker.env
+            - ./docker/containers/app/app.env
+            - ./docker/containers/app/app.development.env
 
-# web:
-#
-#   # use whatever volumes are configured for the app container
-#   volumes_from:
-#     - app
+
+        volumes:
+            - ./app:/home/app
+
+        # expose the port we configured Puma to bind to
+        ports:
+            - "4545"
+
+    web:
+        env_file:
+            - ./docker/docker.env
+            - ./docker/containers/web/web.env
+            - ./docker/containers/app/app.development.env
