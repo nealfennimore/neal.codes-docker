@@ -3,8 +3,15 @@
 # Reload NVM
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" || exit 1
 
-cd $ROOT_DIR
-npm rebuild node-sass
-npm run build
+CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
-exec node $ROOT_DIR/server/express.js
+if [ $CURRENT_ENVIRONMENT == "development" ]; then
+    npm rebuild node-sass # In case we're using different environments
+    exec npm run develop
+else
+    npm install forever -g
+    npm run build
+    npm rebuild node-sass # In case we're using different environments
+
+    exec forever $ROOT_DIR/server/express.js
+fi
