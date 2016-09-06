@@ -1,5 +1,23 @@
 #!/usr/bin/env bash
 
+# ------- NGINX
+
+# Set exclusion globbing
+shopt -s extglob
+
+# Backup default nginx config
+mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
+
+# Add in new config
+cp $TMP_DIR/nginx/nginx.conf /etc/nginx/nginx.conf
+
+# Copy conf files over to available and then link as enabled
+# We do not copy over the default config
+cp $TMP_DIR/nginx/!(nginx).conf /etc/nginx/sites-available
+ln -sf /etc/nginx/sites-available/*.conf /etc/nginx/sites-enabled
+
+# ------- SSL CERT
+
 # initialize the letsencrypt.sh environment
 setup_letsencrypt() {
 
