@@ -37,9 +37,9 @@ services:
         links:
             - app
 
-        # persist SSL certificates
         volumes:
-            - ssl:/var/www/ssl
+            - ssl:/var/www/ssl # persist SSL certificates
+            - ./app/public:/home/app/public # Link the static files so nginx can access them without going through node
 
         # expose the port we configured Nginx to bind to
         ports:
