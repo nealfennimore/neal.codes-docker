@@ -4,6 +4,11 @@ source utils.sh
 # Export environment variables so that they're accessible to envsubst
 export $(getEnvVars)
 
+# Remove old build
+if [ -d $DOCKER_ROOT ]; then
+    rm -rf $DOCKER_ROOT
+fi
+
 TEMP_DIR="$DOCKER_ROOT/tmp"
 
 # Concatenate a string of all environment names with colon separators
