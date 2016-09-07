@@ -11,7 +11,7 @@ WORKDIR $ROOT_DIR
 RUN mkdir -p $TMP_DIR/nginx /etc/nginx/sites-available /etc/nginx/sites-enabled
 
 # Copy our Nginx config
-COPY $DOCKER_ROOT/containers/web/*.conf $TMP_DIR/nginx/
+COPY $DOCKER_ROOT/containers/**/*.conf $TMP_DIR/nginx/
 
 # copy over the script that is run by the container
 COPY $DOCKER_ROOT/containers/web/web_cmd.sh $TMP_DIR/
