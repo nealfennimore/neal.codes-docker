@@ -10,8 +10,7 @@ if [ $CURRENT_ENVIRONMENT == "development" ]; then
     exec npm run develop
 else
     npm install forever -g
-    npm run build
     npm rebuild node-sass # In case we're using different environments
 
-    exec forever $ROOT_DIR/server/express.js
+    exec npm run start
 fi
