@@ -4,6 +4,4 @@ source utils.sh
 # Export environment variables so that they're accessible to envsubst
 export $(getEnvVars)
 
-echo $(getEnvVars)
-
-docker-compose up
+docker-compose up #-d
