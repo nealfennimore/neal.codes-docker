@@ -18,7 +18,7 @@ services:
 
         # expose the port we configured for the app
         ports:
-            - "4545"
+            - "${APP_PORT}"
 
     # service configuration for our web server
     web:
@@ -32,6 +32,7 @@ services:
         env_file:
             - ./docker/docker.env
             - ./docker/containers/web/web.env
+            - ./docker/containers/app/app.env
 
         # makes the web container aware of the app container
         links:
@@ -39,7 +40,7 @@ services:
 
         volumes:
             - ssl:/var/www/ssl # persist SSL certificates
-            - ./app/public:/home/app/public # Link the static files so nginx can access them without going through node
+            - "./app/${APP_ASSET_DIR}:/home/app/${APP_ASSET_DIR}" # Link the static files so nginx can access them without going through node
 
         # expose the port we configured Nginx to bind to
         ports:
