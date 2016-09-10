@@ -13,10 +13,6 @@ services:
             - ./docker/containers/app/app.env
             - ./docker/containers/app/app.development.env
 
-        # expose the port we configured Puma to bind to
-        ports:
-            - "4545"
-
     web:
         env_file:
             - ./docker/docker.env
