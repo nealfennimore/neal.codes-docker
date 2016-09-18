@@ -11,7 +11,7 @@ function getEnv (){
     cat docker/docker.env | removeComments | grep ENVIRONMENT | sed 's/ENVIRONMENT=//';
 }
 
-function getNonEnv (){
+function setNonEnv (){
     local COUNT=`echo ${#NON_ENV[@]}`
     if [[ $COUNT > 0 ]]; then
         return
@@ -34,7 +34,7 @@ function getEnvVars (){
 }
 
 function getExcludedFiles {
-    getNonEnv
+    setNonEnv
     for i in ${NON_ENV[@]}; do
         printf "! -name *${i}* "
     done
