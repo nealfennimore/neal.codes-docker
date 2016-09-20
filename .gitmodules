@@ -2,3 +2,7 @@
 	path = app
 	url = https://github.com/nealfennimore/neal.codes-app.git
 	branch = master
+[submodule "ghost"]
+	path = ghost
+	url = https://github.com/nealfennimore/Ghost.git
+	branch = release-0.11.0
