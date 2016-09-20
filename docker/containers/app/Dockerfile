@@ -2,20 +2,20 @@
 # Base image
 FROM ubuntu:trusty
 
-ENV ROOT_DIR $ROOT_DIR
-ENV NVM_DIR $NVM_DIR
-ENV NODE_VERSION $NODE_VERSION
+ENV ROOT_DIR $APP_ROOT_DIR
+ENV NVM_DIR $APP_NVM_DIR
+ENV NODE_VERSION $APP_NODE_VERSION
 
-WORKDIR $ROOT_DIR
+WORKDIR $APP_ROOT_DIR
 
 # Update the OS packages list and will install some libraries
 RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git python
 
 # Install NVM and node
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.4/install.sh | bash \
-    && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
+    && [ -s "$APP_NVM_DIR/nvm.sh" ] && . "$APP_NVM_DIR/nvm.sh" \
+    && nvm install $APP_NODE_VERSION \
+    && nvm alias default $APP_NODE_VERSION \
     && nvm use default
 
 # copy over the script that is run by the container

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Reload NVM
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" || exit 1
+[ -s "$APP_NVM_DIR/nvm.sh" ] && . "$APP_NVM_DIR/nvm.sh" || exit 1
 
 CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
