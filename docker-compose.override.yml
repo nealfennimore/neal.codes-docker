@@ -1,13 +1,6 @@
 version: "2"
 services:
     app:
-        # use the Dockerfile next to this file
-        build:
-            context: .
-            # build with Dockerfile
-            dockerfile: ./.docker/containers/app/Dockerfile
-
-        # sources environment variable configuration for our app
         env_file:
             - ./docker/docker.env
             - ./docker/containers/app/app.env
