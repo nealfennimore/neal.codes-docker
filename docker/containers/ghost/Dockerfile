@@ -25,7 +25,7 @@ COPY $DOCKER_ROOT/containers/ghost/ghost_cmd.sh $TMP_DIR/
 COPY $DOCKER_ROOT/containers/ghost/ghost_service.sh /etc/init.d/ghost
 
 # Copy over ghost config
-COPY $DOCKER_ROOT/containers/ghost/config.js $GHOST_ROOT_DIR/
+COPY $DOCKER_ROOT/containers/ghost/config.js $GHOST_ROOT_DIR/config.js
 
 # Add in ghost user
 RUN sudo useradd -r ghost -U
