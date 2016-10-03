@@ -9,7 +9,7 @@ ENV NODE_VERSION $GHOST_NODE_VERSION
 WORKDIR $GHOST_ROOT_DIR
 
 # Update the OS packages list and will install some libraries
-RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git python
+RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git python sqlite3
 
 # Install NVM and node
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.4/install.sh | bash \
