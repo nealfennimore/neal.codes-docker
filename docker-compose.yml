@@ -63,6 +63,10 @@ services:
             - "ssl:${SSL_ROOT}" # persist SSL certificates
             - "./app/${APP_ASSET_DIR}:${APP_ROOT_DIR}/${APP_ASSET_DIR}" # Link the static files so nginx can access them without going through node
 
+        depends_on:
+            - app
+            - ghost
+
         # expose the port we configured Nginx to bind to
         ports:
             - "80:80"
