@@ -58,6 +58,7 @@ services:
         # makes the web container aware of the app container
         links:
             - app
+            - ghost
 
         volumes:
             - "ssl:${SSL_ROOT}" # persist SSL certificates
