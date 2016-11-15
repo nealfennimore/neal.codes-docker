@@ -11,9 +11,7 @@ fi
 
 TEMP_DIR="$DOCKER_ROOT/tmp"
 
-# Concatenate a string of all environment names with colon separators
-env_names=`getEnvVars | grep -Eo '[A-Z|_]+' | awk '{print "$"$0}' | tr '\n' ':'`
-env_names=${env_names%?} # Remove trailing ':'
+env_names=$(getEnvSubstituteString)
 
 # Make holding dir for environment substition
 mkdir -p $TEMP_DIR
