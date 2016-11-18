@@ -50,4 +50,4 @@ done
 rm -r $TEMP_DIR
 
 # Build with docker compose
-sudo bash -c "export $(getEnvVars) && docker-compose build"
+bash -c "export $(getEnvVars) && docker-compose build $@"
