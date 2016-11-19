@@ -11,7 +11,7 @@ config = {
     // When running Ghost in the wild, use the production environment.
     // Configure your URL and mail settings here
     production: {
-        url: 'http://$HOST_NAME/$GHOST_URL_PATH',
+        url: 'http://$HOST_NAME',
         mail: {},
         database: {
             client: 'sqlite3',
@@ -31,7 +31,7 @@ config = {
     development: {
         // The url to use when providing links to the site, E.g. in RSS and email.
         // Change this to your Ghost blog's published URL.
-        url: 'http://$HOST_NAME/$GHOST_URL_PATH',
+        url: 'http://$HOST_NAME',
 
         // Example refferer policy
         // Visit https://www.w3.org/TR/referrer-policy/ for instructions
