@@ -16,6 +16,11 @@ cp $TMP_DIR/nginx/nginx.conf /etc/nginx/nginx.conf
 cp $TMP_DIR/nginx/!(nginx).conf /etc/nginx/sites-available
 ln -sf /etc/nginx/sites-available/*.conf /etc/nginx/sites-enabled
 
+if [[ -d $APP_ROOT_DIR/$APP_ASSET_DIR ]]; then
+    # Static files need to be owned by nginx user
+    chown -R nginx:nginx $APP_ROOT_DIR/$APP_ASSET_DIR
+fi
+
 # ------- SSL CERT
 
 # initialize the letsencrypt.sh environment
