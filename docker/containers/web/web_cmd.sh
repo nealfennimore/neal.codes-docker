@@ -40,7 +40,7 @@ setup_letsencrypt() {
   echo "WELLKNOWN=\"$SSL_ROOT/.well-known/acme-challenge\"" >> config.sh
 
   # fetch stable version of letsencrypt.sh
-  curl "https://raw.githubusercontent.com/lukas2511/letsencrypt.sh/v0.1.0/letsencrypt.sh" > letsencrypt.sh
+  curl "https://raw.githubusercontent.com/lukas2511/dehydrated/v0.3.1/dehydrated" > letsencrypt.sh
   chmod 755 letsencrypt.sh
 }
 
@@ -69,6 +69,8 @@ if [ "$CA_SSL" = "true" ]; then
   # Nginx must be running for challenges to proceed
   # run in daemon mode so our script can continue
   nginx
+
+  cd $SSL_ROOT
 
   # retrieve/renew SSL certs
   ./letsencrypt.sh --cron
