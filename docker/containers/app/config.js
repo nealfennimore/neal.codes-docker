@@ -10,6 +10,7 @@ const config = {
         protocol: 'https'
     },
     paths: {
+        ROOT: path.resolve(__dirname),
         CLIENT: path.resolve(__dirname, 'client'),
         SERVER: path.resolve(__dirname, 'server'),
         PUBLIC: path.resolve(__dirname, 'public'),
