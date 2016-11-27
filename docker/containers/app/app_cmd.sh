@@ -11,6 +11,7 @@ echo "$(grep -vwE "(dockerhost)" /etc/hosts)" > /etc/hosts
 echo "$(netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}') dockerhost" >> /etc/hosts
 
 if [ $CURRENT_ENVIRONMENT == "development" ]; then
+    npm install nodemon -g
     npm rebuild node-sass # In case we're using different environments
     exec npm run develop
 else
