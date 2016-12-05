@@ -21,7 +21,8 @@ const config = {
         VENDOR_SCSS: /vendorStyles\.scss$/
     },
     webpack: {
-        cssModuleName: `[name]-[local]__${buildVersion}`
+        cssModuleName: `[name]-[local]__${buildVersion}`,
+        hmrPath: '$APP_HMR_PATH'
     }
 };
 
