@@ -18,7 +18,7 @@ const config = {
     },
     regex: {
         VENDOR_FILES: /vendor(Styles)?\.(scss|css|js)$/,
-        VENDOR_SCSS: /vendorStyles\.scss$/
+        VENDOR_SCSS: /vendor(Styles)?\.scss$/
     },
     webpack: {
         cssModuleName: `[name]-[local]__${buildVersion}`,
