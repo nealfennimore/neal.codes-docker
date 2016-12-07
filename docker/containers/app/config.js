@@ -18,7 +18,10 @@ const config = {
     },
     regex: {
         VENDOR_FILES: /vendor\.(scss|css|js)$/,
-        VENDOR_SCSS: /vendor\.scss$/
+        VENDOR_SCSS: /vendor\.scss$/,
+        IMAGE_FILES: /.*\.(gif|png|jpe?g|svg)$/i,
+        FONT_FILES: /fonts\/.*\.(eot|svg|ttf|woff2?)(\?.*)?$/,
+        FONT_STYLES: /fonts\/style\.scss$/
     },
     webpack: {
         cssModuleName: `[name]-[local]__${buildVersion}`,
