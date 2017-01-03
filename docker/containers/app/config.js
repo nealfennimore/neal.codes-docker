@@ -20,6 +20,7 @@ const config = {
         VENDOR_FILES: /vendor\.(scss|css|js)$/,
         VENDOR_SCSS: /vendor\.scss$/,
         IMAGE_FILES: /.*\.(gif|png|jpe?g|svg)$/i,
+        PROJECT_IMAGE_FILES: /projects\/.*\.(gif|png|jpe?g|svg)$/i,
         FONT_FILES: /fonts\/.*\.(eot|svg|ttf|woff2?)(\?.*)?$/,
         FONT_STYLES: /fonts\/style\.scss$/
     },
