@@ -5,6 +5,7 @@ services:
             - ./docker/docker.env
             - ./docker/containers/app/app.env
             - ./docker/containers/app/app.development.env
+            - ./docker/containers/web/web.env
 
     web:
         env_file:
