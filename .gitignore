@@ -1,3 +1,4 @@
 .docker
 docker/**/**/*.development.env
 .sync-config.cson
+docker-compose.override.yml
