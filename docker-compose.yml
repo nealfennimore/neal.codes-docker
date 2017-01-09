@@ -38,7 +38,7 @@ services:
         volumes:
             - ./ghost:/home/ghost/ghost
             - "./.docker/containers/ghost/config.js:${GHOST_ROOT_DIR}/config.js"
-            - ./.git:/home/ghost
+            - ./.git:/home/ghost/.git
 
         # expose the port we configured for the app
         ports:
