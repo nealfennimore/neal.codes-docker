@@ -5,11 +5,11 @@
 
 CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
-sudo npm rebuild # For different environments
+npm rebuild # For different environments
 
-sudo git submodule update --init --recursive
+git submodule update --init --recursive
 
-sudo npm install -g grunt-cli knex-migrator
+npm install -g grunt-cli knex-migrator
 npm install
 
 grunt init
