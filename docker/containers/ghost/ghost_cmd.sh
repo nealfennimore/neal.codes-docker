@@ -8,7 +8,7 @@ CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 sudo chown -R ghost:ghost $GHOST_USER_DIR
 
 npm rebuild # For different environments
-git submodule update --init --recursive # reset submodule root path
+rm -rf .git && git init && git submodule update --init --recursive # reset submodule root path
 
 npm install -g grunt-cli knex-migrator
 npm install
