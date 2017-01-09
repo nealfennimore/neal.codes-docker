@@ -6,8 +6,7 @@
 CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
 npm rebuild # For different environments
-
-rm .git && git init && git submodule update --init --recursive # reset submodule root path
+git submodule update --init --recursive # reset submodule root path
 
 npm install -g grunt-cli knex-migrator
 npm install

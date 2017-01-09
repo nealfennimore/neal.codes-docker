@@ -12,7 +12,7 @@ WORKDIR $GHOST_ROOT_DIR
 RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git python sqlite3
 
 # Add in ghost user, add as a sudoer, and delete password
-RUN useradd -r ghost -U \
+RUN useradd -m -r ghost -U \
     && usermod -aG sudo ghost \
     && passwd -d ghost
 
@@ -31,9 +31,6 @@ COPY $DOCKER_ROOT/containers/ghost/ghost_cmd.sh $GHOST_USER_DIR/
 
 # Copy over ghost config
 COPY $DOCKER_ROOT/containers/ghost/config.js $GHOST_ROOT_DIR/config.js
-
-# Create dir
-RUN mkdir -p $GHOST_ROOT_DIR
 
 #  Add ghost as a service and reenable when rebooting
 RUN chown -R ghost:ghost $GHOST_USER_DIR
