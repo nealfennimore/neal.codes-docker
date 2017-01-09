@@ -12,7 +12,9 @@ WORKDIR $GHOST_ROOT_DIR
 RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git python sqlite3
 
 # Add in ghost user
-RUN sudo useradd -r ghost -U
+RUN useradd -r ghost -U
+# Add as a sudoer
+RUN usermod -aG sudo ghost
 
 # Copy over ghost service script
 COPY $DOCKER_ROOT/containers/ghost/ghost_service.sh /etc/init.d/ghost
