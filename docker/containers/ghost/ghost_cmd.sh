@@ -5,6 +5,8 @@
 
 CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
+sudo chown -R ghost:ghost $GHOST_USER_DIR
+
 npm rebuild # For different environments
 git submodule update --init --recursive # reset submodule root path
 
