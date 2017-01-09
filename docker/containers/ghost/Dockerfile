@@ -11,6 +11,11 @@ WORKDIR $GHOST_ROOT_DIR
 # Update the OS packages list and will install some libraries
 RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git python sqlite3
 
+# Add in ghost user, add as a sudoer, and delete password
+RUN useradd -r ghost -U \
+    && usermod -aG sudo ghost \
+    && passwd -d ghost
+
 # Install NVM and node
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.4/install.sh | bash \
     && [ -s "$GHOST_NVM_DIR/nvm.sh" ] && . "$GHOST_NVM_DIR/nvm.sh" \
@@ -18,16 +23,20 @@ RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.4/install.sh
     && nvm alias default $GHOST_NODE_VERSION \
     && nvm use default
 
-# Add in ghost user
-RUN useradd -r ghost -U
-# Add as a sudoer
-RUN usermod -aG sudo ghost
-
 # Copy over ghost service script
 COPY $DOCKER_ROOT/containers/ghost/ghost_service.sh /etc/init.d/ghost
 
+# copy over the script that is run by the container
+COPY $DOCKER_ROOT/containers/ghost/ghost_cmd.sh $GHOST_USER_DIR/
+
+# Copy over ghost config
+COPY $DOCKER_ROOT/containers/ghost/config.js $GHOST_ROOT_DIR/config.js
+
+# Create dir
+RUN mkdir -p $GHOST_ROOT_DIR
+
 #  Add ghost as a service and reenable when rebooting
-RUN chown -R ghost:ghost $GHOST_ROOT_DIR
+RUN chown -R ghost:ghost $GHOST_USER_DIR
     # && chmod 755 /etc/init.d/ghost \
     # && update-rc.d ghost defaults \
     # && update-rc.d ghost enable
@@ -35,12 +44,6 @@ RUN chown -R ghost:ghost $GHOST_ROOT_DIR
 # All commands below will be run by ghost user
 USER ghost
 
-# copy over the script that is run by the container
-COPY $DOCKER_ROOT/containers/ghost/ghost_cmd.sh $TMP_DIR/
-
-# Copy over ghost config
-COPY $DOCKER_ROOT/containers/ghost/config.js $GHOST_ROOT_DIR/config.js
-
 # Define the script we want run once the container boots
 # Use the "exec" form of CMD so our script shuts down gracefully on SIGTERM (i.e. `docker stop`)
-CMD [ "$TMP_DIR/ghost_cmd.sh" ]
+CMD [ "$GHOST_USER_DIR/ghost_cmd.sh" ]
