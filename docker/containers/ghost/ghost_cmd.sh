@@ -15,7 +15,7 @@ fi
 
 # Symbolically link git folder for bower and submodule resolution
 if [ ! -L $DOCKER_ROOT_DIR/.git ]; then
-    sudo ln -s $GHOST_ROOT_DIR/.git $DOCKER_ROOT_DIR/.git
+    sudo ln -s $GHOST_USER_DIR/.git $DOCKER_ROOT_DIR/.git
 fi
 
 # rm -rf .git && git init && git submodule update --init --recursive # reset submodule root path
