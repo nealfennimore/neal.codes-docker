@@ -23,7 +23,7 @@ npm install
 grunt init
 
 if [ $CURRENT_ENVIRONMENT == "production" ]; then
-
+    grunt prod
     exec npm start --production
 else
     exec npm start
