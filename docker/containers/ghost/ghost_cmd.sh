@@ -5,7 +5,7 @@
 
 CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
-sudo chown -R ghost:ghost $GHOST_USER_DIR
+sudo chown -R $GHOST_USER:$GHOST_USER $GHOST_USER_DIR
 
 npm rebuild # For different environments
 
@@ -18,16 +18,13 @@ if [ ! -L $DOCKER_ROOT_DIR/.git ]; then
     sudo ln -s $GHOST_USER_DIR/.git $DOCKER_ROOT_DIR/.git
 fi
 
-# rm -rf .git && git init && git submodule update --init --recursive # reset submodule root path
-
 npm install -g grunt-cli knex-migrator
 npm install
-
 grunt init
 
-if [ $CURRENT_ENVIRONMENT == "development" ]; then
-    exec npm start
-else
-    grunt prod
+if [ $CURRENT_ENVIRONMENT == "production" ]; then
+
     exec npm start --production
+else
+    exec npm start
 fi
