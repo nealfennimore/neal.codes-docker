@@ -24,22 +24,10 @@ fi
 
 # ------- SSL CERT
 
-if [ ! -d "$SSL_ROOT" ]; then
-    mkdir -p $SSL_ROOT/.well-known/acme-challenge
-    chmod 755 $SSL_ROOT
-fi
-
 if ! grep -q "export TERM" ~/.bashrc; then
     # Set terminal as there's none by default
     echo "export TERM=xterm" >> ~/.bashrc
     source ~/.bashrc
-fi
-
-if ! grep -q "deb http://ftp.debian.org/debian jessie-backports main" /etc/apt/sources.list; then
-    echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
-
-    apt-get update
-    apt-get install -y certbot -t jessie-backports
 fi
 
 if [ -L $SSL_ROOT/certs ]; then
