@@ -34,7 +34,7 @@ if ! grep -q "deb http://ftp.debian.org/debian jessie-backports main" /etc/apt/s
     echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
 
     apt-get update
-    apt-get install certbot -t jessie-backports
+    apt-get install -y certbot -t jessie-backports
 fi
 
 if [ -L $SSL_ROOT/certs ]; then
