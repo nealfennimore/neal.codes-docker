@@ -23,29 +23,29 @@ fi
 
 # ------- SSL CERT
 
-# initialize the letsencrypt.sh environment
+# initialize the dehydrated environment
 setup_letsencrypt() {
 
   # create the directory that will serve ACME challenges
   mkdir -p .well-known/acme-challenge
   chmod -R 755 .well-known
 
-  # See https://github.com/lukas2511/letsencrypt.sh/blob/master/docs/domains_txt.md
+  # See https://github.com/lukas2511/dehydrated/blob/master/docs/domains_txt.md
   echo "$HOST_NAME www.$HOST_NAME" > domains.txt
 
-  # See https://github.com/lukas2511/letsencrypt.sh/blob/master/docs/staging.md
-  echo "CA=\"https://acme-staging.api.letsencrypt.org/directory\"" > config.sh
+  # See https://github.com/lukas2511/dehydrated/blob/master/docs/staging.md
+  echo "CA=\"https://acme-staging.api.letsencrypt.org/directory\"" > config
 
-  # See https://github.com/lukas2511/letsencrypt.sh/blob/master/docs/wellknown.md
-  echo "WELLKNOWN=\"$SSL_ROOT/.well-known/acme-challenge\"" >> config.sh
+  # See https://github.com/lukas2511/dehydrated/blob/master/docs/wellknown.md
+  echo "WELLKNOWN=\"$SSL_ROOT\"" >> config
 
-  # fetch stable version of letsencrypt.sh
-  curl "https://raw.githubusercontent.com/lukas2511/dehydrated/v0.3.1/dehydrated" > letsencrypt.sh
-  chmod 755 letsencrypt.sh
+  # fetch stable version of dehydrated
+  curl "https://raw.githubusercontent.com/lukas2511/dehydrated/v0.3.1/dehydrated" > dehydrated
+  chmod 755 dehydrated
 }
 
 # creates self-signed SSL files
-# these files are used in development and get production up and running so letsencrypt.sh can do its work
+# these files are used in development and get production up and running so dehydrated can do its work
 create_pems() {
   openssl req -x509 -nodes -days 730 -newkey rsa:1024 -keyout privkey.pem -out fullchain.pem -subj "/C=US/ST=New Jersey/L=Lawrenceville/O=Massive Good, LLC./CN=$HOST_NAME"
   openssl dhparam -out dhparam.pem 2048
@@ -63,7 +63,7 @@ if [ ! -d "$SSL_CERT_HOME" ]; then
   setup_letsencrypt
 fi
 
-# if we are configured to run SSL with a real certificate authority run letsencrypt.sh to retrieve/renew SSL certs
+# if we are configured to run SSL with a real certificate authority run dehydrated to retrieve/renew SSL certs
 if [ "$CA_SSL" = "true" ]; then
 
   # Nginx must be running for challenges to proceed
@@ -73,7 +73,7 @@ if [ "$CA_SSL" = "true" ]; then
   cd $SSL_ROOT
 
   # retrieve/renew SSL certs
-  ./letsencrypt.sh --cron
+  ./dehydrated --cron
 
   # copy the fresh certs to where Nginx expects to find them
   cp $SSL_ROOT/certs/$HOST_NAME/fullchain.pem $SSL_ROOT/certs/$HOST_NAME/privkey.pem $SSL_CERT_HOME
