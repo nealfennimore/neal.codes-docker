@@ -24,21 +24,23 @@ fi
 
 # ------- SSL CERT
 
-if ! grep -q "deb http://ftp.debian.org/debian jessie-backports main" /etc/apt/sources.list; then
-    echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
-
-    apt-get update
-    apt-get install certbot -t jessie-backports
-    certbot certonly --webroot -w $SSL_ROOT -d $HOST_NAME -d www.$HOST_NAME
-fi
-
 if ! grep -q "export TERM" ~/.bashrc; then
     # Set terminal as there's none by default
     echo "export TERM=xterm" >> ~/.bashrc
     source ~/.bashrc
 fi
 
-if [ ! -L $SSL_ROOT/certs ]; then
+if ! grep -q "deb http://ftp.debian.org/debian jessie-backports main" /etc/apt/sources.list; then
+    echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
+
+    apt-get update
+    apt-get install certbot -t jessie-backports
+fi
+
+if [ -L $SSL_ROOT/certs ]; then
+    certbot renew --non-interactive --agree-tos --email hi@neal.codes
+else
+    certbot certonly --webroot -w $SSL_ROOT -d $HOST_NAME -d www.$HOST_NAME --non-interactive --agree-tos --email hi@neal.codes
     ln -s /etc/letsencrypt/certs $SSL_ROOT/certs
 fi
 
