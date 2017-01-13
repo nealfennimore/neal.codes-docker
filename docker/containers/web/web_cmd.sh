@@ -24,6 +24,11 @@ fi
 
 # ------- SSL CERT
 
+if [ ! -d "$SSL_ROOT" ]; then
+    mkdir -p $SSL_ROOT/.well-known/acme-challenge
+    chmod 755 $SSL_ROOT
+fi
+
 if ! grep -q "export TERM" ~/.bashrc; then
     # Set terminal as there's none by default
     echo "export TERM=xterm" >> ~/.bashrc
