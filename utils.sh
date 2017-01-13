@@ -27,8 +27,15 @@ function setNonEnv (){
 }
 
 function getEnvVars (){
+    local CURRENT_ENV=$(getEnv)
+    local SORT_COMMANDS=''
+
+    if [ $CURRENT_ENV == 'development' ]; then
+        SORT_COMMANDS='-r'
+    fi
+
     find "${FILE_DIR}/docker" -name '*.env' $(getExcludedFiles) |
-    sort -r | #Make sure development files load after production files   so vars overwrite
+    sort $SORT_COMMANDS | #Make sure development files load after production files so vars overwrite
     while read i; do echo "$(cat $i)"; done |
     removeComments |
     xargs;
