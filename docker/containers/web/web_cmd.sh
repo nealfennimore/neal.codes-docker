@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
 # ------- NGINX
 
@@ -23,63 +24,22 @@ fi
 
 # ------- SSL CERT
 
-# initialize the dehydrated environment
-setup_letsencrypt() {
+if ! grep -q "deb http://ftp.debian.org/debian jessie-backports main" /etc/apt/sources.list; then
+    echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
 
-  # create the directory that will serve ACME challenges
-  mkdir -p .well-known/acme-challenge
-  chmod -R 755 .well-known
-
-  # See https://github.com/lukas2511/dehydrated/blob/master/docs/domains_txt.md
-  echo "$HOST_NAME www.$HOST_NAME" > domains.txt
-
-  # See https://github.com/lukas2511/dehydrated/blob/master/docs/staging.md
-  echo "CA=\"https://acme-staging.api.letsencrypt.org/directory\"" > config
-
-  # See https://github.com/lukas2511/dehydrated/blob/master/docs/wellknown.md
-  echo "WELLKNOWN=\"$SSL_ROOT\"" >> config
-
-  # fetch stable version of dehydrated
-  curl "https://raw.githubusercontent.com/lukas2511/dehydrated/v0.3.1/dehydrated" > dehydrated
-  chmod 755 dehydrated
-}
-
-# creates self-signed SSL files
-# these files are used in development and get production up and running so dehydrated can do its work
-create_pems() {
-  openssl req -x509 -nodes -days 730 -newkey rsa:1024 -keyout privkey.pem -out fullchain.pem -subj "/C=US/ST=New Jersey/L=Lawrenceville/O=Massive Good, LLC./CN=$HOST_NAME"
-  openssl dhparam -out dhparam.pem 2048
-  chmod 600 *.pem
-}
-
-# if we have not already done so initialize Docker volume to hold SSL files
-if [ ! -d "$SSL_CERT_HOME" ]; then
-  mkdir -p $SSL_CERT_HOME
-  chmod 755 $SSL_ROOT
-  chmod -R 700 $SSL_ROOT/certs
-  cd $SSL_CERT_HOME
-  create_pems
-  cd $SSL_ROOT
-  setup_letsencrypt
+    apt-get update
+    apt-get install certbot -t jessie-backports
+    certbot certonly --webroot -w $SSL_ROOT -d $HOST_NAME -d www.$HOST_NAME
 fi
 
-# if we are configured to run SSL with a real certificate authority run dehydrated to retrieve/renew SSL certs
-if [ "$CA_SSL" = "true" ]; then
+if ! grep -q "export TERM" ~/.bashrc; then
+    # Set terminal as there's none by default
+    echo "export TERM=xterm" >> ~/.bashrc
+    source ~/.bashrc
+fi
 
-  # Nginx must be running for challenges to proceed
-  # run in daemon mode so our script can continue
-  nginx
-
-  cd $SSL_ROOT
-
-  # retrieve/renew SSL certs
-  ./dehydrated --cron
-
-  # copy the fresh certs to where Nginx expects to find them
-  cp $SSL_ROOT/certs/$HOST_NAME/fullchain.pem $SSL_ROOT/certs/$HOST_NAME/privkey.pem $SSL_CERT_HOME
-
-  # pull Nginx out of daemon mode
-  nginx -s stop
+if [ ! -L $SSL_ROOT/certs ]; then
+    ln -s /etc/letsencrypt/certs $SSL_ROOT/certs
 fi
 
 # start Nginx in foreground so Docker container doesn't exit
