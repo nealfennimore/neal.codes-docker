@@ -47,18 +47,20 @@ if [ ! -d $SSL_CERT_HOME ]; then
     # We'll create default pem files in case certbot doesn't work
     create_pems
 
-    # Nginx must be running for challenges to proceed
-    # run in daemon mode so our script can continue
-    nginx
+    if [[ $CURRENT_ENVIRONMENT == 'production' ]]; then
+        # Nginx must be running for challenges to proceed
+        # run in daemon mode so our script can continue
+        nginx
 
-    # Start certification process
-    certbot certonly --webroot -w $SSL_ROOT -d $HOST_NAME -d www.$HOST_NAME --non-interactive --agree-tos --email hi@neal.codes
+        # Start certification process
+        certbot certonly --webroot -w $SSL_ROOT -d $HOST_NAME -d www.$HOST_NAME --non-interactive --agree-tos --email hi@neal.codes
 
-    # pull Nginx out of daemon mode
-    nginx -s stop
+        # pull Nginx out of daemon mode
+        nginx -s stop
 
-    link_certs
-else
+        link_certs
+    fi
+elif [[ $CURRENT_ENVIRONMENT == 'production' ]]; then
     certbot renew --non-interactive --agree-tos --email hi@neal.codes
     link_certs
 fi
