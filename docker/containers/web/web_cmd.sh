@@ -35,9 +35,8 @@ create_pems() {
   openssl dhparam -out dhparam.pem 2048
 }
 
-copy_certs(){
-    cp -rf /etc/letsencrypt/live/$HOST_NAME/* $SSL_CERT_HOME
-    chmod 600 $SSL_CERT_HOME/*.pem
+link_certs(){
+    ln -sf /etc/letsencrypt/live/$HOST_NAME/*.pem $SSL_CERT_HOME
 }
 
 if [ ! -d $SSL_CERT_HOME ]; then
@@ -58,10 +57,10 @@ if [ ! -d $SSL_CERT_HOME ]; then
     # pull Nginx out of daemon mode
     nginx -s stop
 
-    copy_certs
+    link_certs
 else
     certbot renew --non-interactive --agree-tos --email hi@neal.codes
-    copy_certs
+    link_certs
 fi
 
 # start Nginx in foreground so Docker container doesn't exit
