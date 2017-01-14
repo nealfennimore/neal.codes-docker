@@ -30,11 +30,38 @@ if ! grep -q "export TERM" ~/.bashrc; then
     source ~/.bashrc
 fi
 
-if [ -L $SSL_ROOT/certs ]; then
-    certbot renew --non-interactive --agree-tos --email hi@neal.codes
-else
+create_pems() {
+  openssl req -x509 -nodes -days 730 -newkey rsa:1024 -keyout privkey.pem -out fullchain.pem -subj "/C=US/ST=New Jersey/L=Lawrenceville/O=Massive Good, LLC./CN=$HOST_NAME"
+  openssl dhparam -out dhparam.pem 2048
+}
+
+copy_certs(){
+    cp -rf /etc/letsencrypt/live/$HOST_NAME/* $SSL_CERT_HOME
+    chmod 600 $SSL_CERT_HOME/*.pem
+}
+
+if [ ! -d $SSL_CERT_HOME ]; then
+    mkdir -p $SSL_CERT_HOME
+    chmod -R 700 $SSL_ROOT/certs
+    cd $SSL_CERT_HOME
+
+    # We'll create default pem files in case certbot doesn't work
+    create_pems
+
+    # Nginx must be running for challenges to proceed
+    # run in daemon mode so our script can continue
+    nginx
+
+    # Start certification process
     certbot certonly --webroot -w $SSL_ROOT -d $HOST_NAME -d www.$HOST_NAME --non-interactive --agree-tos --email hi@neal.codes
-    ln -s /etc/letsencrypt/certs $SSL_ROOT/certs
+
+    # pull Nginx out of daemon mode
+    nginx -s stop
+
+    copy_certs
+else
+    certbot renew --non-interactive --agree-tos --email hi@neal.codes
+    copy_certs
 fi
 
 # start Nginx in foreground so Docker container doesn't exit
