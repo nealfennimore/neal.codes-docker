@@ -5,8 +5,6 @@
 
 CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
-sudo chown -R $GHOST_USER:$GHOST_USER $GHOST_USER_DIR
-
 npm rebuild # For different environments
 
 if [ ! -d $DOCKER_ROOT_DIR ]; then

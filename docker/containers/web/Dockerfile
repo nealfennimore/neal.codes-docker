@@ -9,6 +9,9 @@ RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/so
     && apt-get update \
     && apt-get install -y certbot -t jessie-backports
 
+RUN groupmod -g $SHARED_GID nginx \
+    && usermod -u $SHARED_UID nginx
+
 # Set our working directory inside the image
 WORKDIR $ROOT_DIR
 

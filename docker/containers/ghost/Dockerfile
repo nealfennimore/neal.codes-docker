@@ -12,9 +12,16 @@ WORKDIR $GHOST_ROOT_DIR
 RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git python sqlite3
 
 # Add in ghost user, add as a sudoer, and delete password
-RUN useradd -m -r ghost -U \
-    && usermod -aG sudo ghost \
+RUN useradd --create-home --skel --system ghost -U \
+    && groupmod -g $SHARED_GID ghost \
+    && usermod -u $SHARED_UID -aG sudo ghost \
     && passwd -d ghost
+
+# Ensure user dir is owned
+RUN chown $SHARED_UID:$SHARED_GID $GHOST_USER_DIR
+s
+# All commands below will be run by ghost user
+USER ghost
 
 # Install NVM and node
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.4/install.sh | bash \
@@ -31,15 +38,6 @@ COPY $DOCKER_ROOT/containers/ghost/ghost_cmd.sh $GHOST_USER_DIR/
 
 # Copy over ghost config
 COPY $DOCKER_ROOT/containers/ghost/config.js $GHOST_ROOT_DIR/config.js
-
-#  Add ghost as a service and reenable when rebooting
-RUN chown -R ghost:ghost $GHOST_USER_DIR
-    # && chmod 755 /etc/init.d/ghost \
-    # && update-rc.d ghost defaults \
-    # && update-rc.d ghost enable
-
-# All commands below will be run by ghost user
-USER ghost
 
 # Define the script we want run once the container boots
 # Use the "exec" form of CMD so our script shuts down gracefully on SIGTERM (i.e. `docker stop`)
