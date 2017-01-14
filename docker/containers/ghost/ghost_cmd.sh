@@ -5,15 +5,10 @@
 
 CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
-npm rebuild # For different environments
+sudo chown -R $SHARED_UID:$SHARED_GID $GHOST_DB_DIR
 
-if [ ! -d $DOCKER_ROOT_DIR ]; then
-    sudo mkdir -p $DOCKER_ROOT_DIR
-fi
-
-# Symbolically link git folder for bower and submodule resolution
-if [ ! -L $DOCKER_ROOT_DIR/.git ]; then
-    sudo ln -s $GHOST_USER_DIR/.git $DOCKER_ROOT_DIR/.git
+if [[ $CURRENT_ENVIRONMENT != "production" ]]; then
+    npm rebuild # For different environments
 fi
 
 npm install -g grunt-cli knex-migrator

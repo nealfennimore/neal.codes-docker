@@ -12,14 +12,17 @@ WORKDIR $GHOST_ROOT_DIR
 RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git python sqlite3
 
 # Add in ghost user, add as a sudoer, and delete password
-RUN useradd --create-home --skel --system ghost -U \
+RUN useradd --create-home --skel /etc/skel --system ghost -U \
     && groupmod -g $SHARED_GID ghost \
     && usermod -u $SHARED_UID -aG sudo ghost \
     && passwd -d ghost
 
 # Ensure user dir is owned
 RUN chown $SHARED_UID:$SHARED_GID $GHOST_USER_DIR
-s
+
+# Create symbolic link for git submodules to work properly
+RUN ln -sf $GHOST_USER_DIR/.git $GHOST_ROOT_DIR/../.git
+
 # All commands below will be run by ghost user
 USER ghost
 

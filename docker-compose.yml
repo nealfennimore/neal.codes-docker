@@ -36,10 +36,10 @@ services:
 
         # Reference app to /home/app (Should be copied for production)
         volumes:
-            - ./ghost:/home/ghost/ghost
+            - "./ghost:${GHOST_ROOT_DIR}"
             - "./.docker/containers/ghost/config.js:${GHOST_ROOT_DIR}/config.js"
-            - ./.git:/home/ghost/.git
-            - "ghostDB:${GHOST_DB}"
+            - "./.git:${GHOST_USER_DIR}/.git"
+            - "ghostDB:${GHOST_DB_DIR}"
 
         # expose the port we configured for the app
         ports:
