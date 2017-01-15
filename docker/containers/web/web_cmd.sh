@@ -33,11 +33,13 @@ fi
 create_pems() {
     echo "Creating pem files"
     openssl req -x509 -nodes -days 730 -newkey rsa:1024 -keyout privkey.pem -out fullchain.pem -subj "/C=US/ST=California/L=San Francisco/O=Fake Company, LLC./CN=$HOST_NAME"
+    openssl dhparam -out dhparam.pem 2048
+    chmod 600 *.pem
 }
 
 create_dhparam_pem() {
     echo "Creating dhparam pem"
-    openssl dhparam -out dhparam.pem 2048
+
 }
 
 link_certs(){
@@ -50,7 +52,8 @@ has_certs(){
 
 if [[ $CURRENT_ENVIRONMENT == 'production' ]]; then
     if [[ ! $(has_certs) ]]; then
-        create_dhparam_pem
+        cd $SSL_CERT_HOME
+        create_pems # nginx needs to start with pem keys
 
         # Nginx must be running for challenges to proceed
         # run in daemon mode so our script can continue
@@ -71,7 +74,6 @@ if [[ $CURRENT_ENVIRONMENT == 'production' ]]; then
 elif [[ ! $(has_certs) ]]; then
     cd $SSL_CERT_HOME
     create_pems
-    create_dhparam_pem
 fi
 
 # start Nginx in foreground so Docker container doesn't exit
