@@ -67,6 +67,7 @@ services:
 
         volumes:
             - "ssl:${SSL_ROOT}" # persist SSL certificates
+            - "letsencryptCerts:${SSL_LE_DIR}"
             - "./app/${APP_ASSET_DIR}:${APP_ROOT_DIR}/${APP_ASSET_DIR}" # Link the static files so nginx can access them without going through node
 
         depends_on:
@@ -80,4 +81,5 @@ services:
 
 volumes:
     ssl: {}
+    letsencryptCerts: {}
     ghostDB: {}

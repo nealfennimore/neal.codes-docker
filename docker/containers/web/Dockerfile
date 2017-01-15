@@ -19,8 +19,9 @@ WORKDIR $ROOT_DIR
 RUN mkdir -p $TMP_DIR/nginx /etc/nginx/sites-available /etc/nginx/sites-enabled
 
 # Create SSL certs directory
-RUN mkdir -p $SSL_ROOT/.well-known/acme-challenge \
-    && chmod -R 755 $SSL_ROOT
+RUN mkdir -p $SSL_ROOT/.well-known/acme-challenge $SSL_CERT_HOME \
+    && chmod -R 755 $SSL_ROOT \
+    && chmod -R 700 $SSL_ROOT/certs
 
 # Copy our Nginx config
 COPY $DOCKER_ROOT/containers/**/*.conf $TMP_DIR/nginx/

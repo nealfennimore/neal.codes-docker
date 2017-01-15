@@ -31,23 +31,27 @@ if ! grep -q "export TERM" ~/.bashrc; then
 fi
 
 create_pems() {
-  openssl req -x509 -nodes -days 730 -newkey rsa:1024 -keyout privkey.pem -out fullchain.pem -subj "/C=US/ST=New Jersey/L=Lawrenceville/O=Massive Good, LLC./CN=$HOST_NAME"
-  openssl dhparam -out dhparam.pem 2048
+    echo "Creating pem files"
+    openssl req -x509 -nodes -days 730 -newkey rsa:1024 -keyout privkey.pem -out fullchain.pem -subj "/C=US/ST=California/L=San Francisco/O=Fake Company, LLC./CN=$HOST_NAME"
+}
+
+create_dhparam_pem() {
+    echo "Creating dhparam pem"
+    openssl dhparam -out dhparam.pem 2048
 }
 
 link_certs(){
-    ln -sf /etc/letsencrypt/live/$HOST_NAME/*.pem $SSL_CERT_HOME
+    ln -sf $SSL_LE_DIR/live/$HOST_NAME/*.pem $SSL_CERT_HOME
 }
 
-if [ ! -d $SSL_CERT_HOME ]; then
-    mkdir -p $SSL_CERT_HOME
-    chmod -R 700 $SSL_ROOT/certs
-    cd $SSL_CERT_HOME
+has_certs(){
+    ls -A $SSL_CERT_HOME
+}
 
-    # We'll create default pem files in case certbot doesn't work
-    create_pems
+if [[ $CURRENT_ENVIRONMENT == 'production' ]]; then
+    if [[ ! $(has_certs) ]]; then
+        create_dhparam_pem
 
-    if [[ $CURRENT_ENVIRONMENT == 'production' ]]; then
         # Nginx must be running for challenges to proceed
         # run in daemon mode so our script can continue
         nginx
@@ -59,10 +63,15 @@ if [ ! -d $SSL_CERT_HOME ]; then
         nginx -s stop
 
         link_certs
+    else
+        certbot renew --non-interactive --agree-tos --email hi@neal.codes
+        link_certs
     fi
-elif [[ $CURRENT_ENVIRONMENT == 'production' ]]; then
-    certbot renew --non-interactive --agree-tos --email hi@neal.codes
-    link_certs
+
+elif [[ ! $(has_certs) ]]; then
+    cd $SSL_CERT_HOME
+    create_pems
+    create_dhparam_pem
 fi
 
 # start Nginx in foreground so Docker container doesn't exit
