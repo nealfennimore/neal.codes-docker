@@ -1,4 +1,5 @@
 import path from 'path';
+import { isDevelopment } from './shared/env.js';
 import buildVersion from './buildStamp.js';
 
 const config = {
@@ -6,7 +7,7 @@ const config = {
         port: $APP_PORT,
         devPort: $APP_DEV_PORT,
         ip: '0.0.0.0',
-        hostname: '$HOST_NAME',
+        hostname: isDevelopment ? 'web' : '$HOST_NAME', // We ignore SSL in development mode
         protocol: 'https'
     },
     paths: {
