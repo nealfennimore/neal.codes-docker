@@ -13,7 +13,7 @@ RUN groupmod -g $SHARED_GID nginx \
     && usermod -u $SHARED_UID nginx
 
 # Set our working directory inside the image
-WORKDIR $ROOT_DIR
+WORKDIR $SSL_ROOT
 
 # Create directories
 RUN mkdir -p $TMP_DIR/nginx /etc/nginx/sites-available /etc/nginx/sites-enabled

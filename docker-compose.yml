@@ -17,7 +17,6 @@ services:
         volumes:
             - "./app:${APP_ROOT_DIR}"
             - "./.docker/containers/app/config.js:${APP_ROOT_DIR}/config.js"
-            - "ssl:${SSL_ROOT}"
 
         # expose the port we configured for the app
         ports:
