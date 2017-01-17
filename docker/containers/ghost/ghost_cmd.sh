@@ -5,7 +5,7 @@
 
 CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
-sudo chown -R $SHARED_UID:$SHARED_GID $GHOST_DB_DIR
+sudo chown -R $SHARED_UID:$SHARED_GID $GHOST_DB_DIR $GHOST_IMAGES_DIR
 
 if [[ $CURRENT_ENVIRONMENT != "production" ]]; then
     npm rebuild # For different environments

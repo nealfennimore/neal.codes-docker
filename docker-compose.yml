@@ -38,8 +38,9 @@ services:
         volumes:
             - "./ghost:${GHOST_ROOT_DIR}"
             - "./.docker/containers/ghost/config.js:${GHOST_ROOT_DIR}/config.js"
-            - "./.git:${GHOST_USER_DIR}/.git"
+            - "./.git:${GHOST_USER_DIR}/.git" # Needed for submodules
             - "ghostDB:${GHOST_DB_DIR}"
+            - "ghostImages:${GHOST_IMAGES_DIR}"
 
         # expose the port we configured for the app
         ports:
@@ -83,3 +84,4 @@ volumes:
     ssl: {}
     letsencryptCerts: {}
     ghostDB: {}
+    ghostImages: {}
