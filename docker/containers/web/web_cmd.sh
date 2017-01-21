@@ -41,11 +41,6 @@ create_pems() {
     chmod 600 *.pem
 }
 
-create_dhparam_pem() {
-    echo "Creating dhparam pem"
-
-}
-
 link_certs(){
     ln -sf $SSL_LE_DIR/live/$HOST_NAME/*.pem $SSL_CERT_HOME
 }
