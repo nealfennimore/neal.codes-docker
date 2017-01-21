@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 CURRENT_ENVIRONMENT=$(printenv ENVIRONMENT)
 
+if [[ $CURRENT_ENVIRONMENT == "production" ]]; then
+    NON_ENV="development"
+else
+    NON_ENV="production"
+fi
 # ------- NGINX
 
 # Set exclusion globbing
@@ -10,12 +15,11 @@ shopt -s extglob
 mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
 
 # Add in new config
-cp $TMP_DIR/nginx/nginx.conf /etc/nginx/nginx.conf
+mv $TMP_DIR/nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Copy conf files over to available and then link as enabled
-# We do not copy over the default config
-cp $TMP_DIR/nginx/!(nginx).conf /etc/nginx/sites-available
-ln -sf /etc/nginx/sites-available/*.conf /etc/nginx/sites-enabled
+cp $TMP_DIR/nginx/!(*$NON_ENV*).conf /etc/nginx/sites-available
+ln -sf /etc/nginx/sites-available/* /etc/nginx/sites-enabled
 
 if [[ -d $APP_ROOT_DIR/$APP_ASSET_DIR ]]; then
     # Static files need to be owned by nginx user
