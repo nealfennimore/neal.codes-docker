@@ -12,14 +12,14 @@ fi
 shopt -s extglob
 
 # Backup default nginx config
-mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
+mv $NGINX_DIR/nginx.conf $NGINX_DIR/nginx.conf.backup
 
 # Add in new config
-mv $TMP_DIR/nginx/nginx.conf /etc/nginx/nginx.conf
+ln -sf $NGINX_DIR/docker/nginx.conf $NGINX_DIR/nginx.conf
 
 # Copy conf files over to available and then link as enabled
-cp $TMP_DIR/nginx/!(*$NON_ENV*).conf /etc/nginx/sites-available
-ln -sf /etc/nginx/sites-available/* /etc/nginx/sites-enabled
+cp $NGINX_DIR/docker/!(*$NON_ENV*|nginx).conf $NGINX_DIR/sites-available
+ln -sf $NGINX_DIR/sites-available/* $NGINX_DIR/sites-enabled
 
 if [[ -d $APP_ROOT_DIR/$APP_ASSET_DIR ]]; then
     # Static files need to be owned by nginx user

@@ -16,7 +16,7 @@ RUN groupmod -g $SHARED_GID nginx \
 WORKDIR $SSL_ROOT
 
 # Create directories
-RUN mkdir -p $TMP_DIR/nginx /etc/nginx/sites-available /etc/nginx/sites-enabled
+RUN mkdir -p $NGINX_DIR/docker $NGINX_DIR/sites-available $NGINX_DIR/sites-enabled
 
 # Create SSL certs directory
 RUN mkdir -p $SSL_ROOT/.well-known/acme-challenge $SSL_CERT_HOME \
@@ -24,7 +24,7 @@ RUN mkdir -p $SSL_ROOT/.well-known/acme-challenge $SSL_CERT_HOME \
     && chmod -R 700 $SSL_ROOT/certs
 
 # Copy our Nginx config
-COPY $DOCKER_ROOT/containers/**/*.conf $TMP_DIR/nginx/
+COPY $DOCKER_ROOT/containers/**/*.conf $NGINX_DIR/docker/
 
 # copy over the script that is run by the container
 COPY $DOCKER_ROOT/containers/web/web_cmd.sh $TMP_DIR/
