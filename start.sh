@@ -1,1 +1,1 @@
-/Users/Neal/Projects/neal.codes-docker/scripts/start.sh
+scripts/start.sh

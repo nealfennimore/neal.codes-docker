@@ -3,7 +3,6 @@ source utils.sh
 
 # Export environment variables so that they're accessible to envsubst
 export $(getEnvVars)
-echo $(getEnvVars)
 
 # Remove old build
 if [ -d $DOCKER_ROOT ]; then

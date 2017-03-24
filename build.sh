@@ -1,1 +1,1 @@
-/Users/Neal/Projects/neal.codes-docker/scripts/build.sh
+scripts/build.sh
