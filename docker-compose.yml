@@ -37,6 +37,8 @@ services:
         volumes:
             - "ghostDB:${GHOST_CONTENT}/data"
             - "ghostImages:${GHOST_CONTENT}/images"
+            - "ghostAdminAssets:${GHOST_SOURCE}/core/built/assets"
+            - "ghostShared:${GHOST_SOURCE}/core/shared"
             - "./.docker/containers/ghost/config.js:${GHOST_SOURCE}/config.js"
 
         # expose the port we configured for ghost
@@ -66,7 +68,10 @@ services:
         volumes:
             - "ssl:${SSL_ROOT}" # persist SSL certificates
             - "letsencryptCerts:${SSL_LE_DIR}"
-            - "./app/${APP_ASSET_DIR}:${APP_ROOT_DIR}/${APP_ASSET_DIR}" # Link the static files so nginx can access them without going through node
+
+        volumes_from:
+            - app
+            - ghost
 
         depends_on:
             - app
@@ -82,3 +87,5 @@ volumes:
     letsencryptCerts: {}
     ghostDB: {}
     ghostImages: {}
+    ghostAdminAssets: {}
+    ghostShared: {}
