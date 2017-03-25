@@ -2,7 +2,3 @@
 	path = app
 	url = git@github.com:nealfennimore/neal.codes-app.git
 	branch = master
-[submodule "ghost"]
-	path = ghost
-	url = git@github.com:TryGhost/Ghost.git
-	branch = 0.11.7
