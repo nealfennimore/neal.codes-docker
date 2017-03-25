@@ -11,12 +11,12 @@ config = {
     // When running Ghost in the wild, use the production environment.
     // Configure your URL and mail settings here
     production: {
-        url: 'http://$HOST_NAME',
+        url: 'https://$HOST_NAME/blog',
         mail: {},
         database: {
             client: 'sqlite3',
             connection: {
-                filename: path.join(__dirname, '/content/data/ghost.db')
+                filename: path.join(__dirname, '/data/ghost.db')
             },
             debug: false
         },
@@ -24,6 +24,10 @@ config = {
         server: {
             host: '0.0.0.0',
             port: '$GHOST_PORT'
+        },
+
+        paths: {
+            contentPath: path.join(process.env.GHOST_CONTENT, '/')
         }
     },
 
@@ -31,7 +35,7 @@ config = {
     development: {
         // The url to use when providing links to the site, E.g. in RSS and email.
         // Change this to your Ghost blog's published URL.
-        url: 'http://$HOST_NAME',
+        url: 'https://$HOST_NAME/blog',
 
         // Example refferer policy
         // Visit https://www.w3.org/TR/referrer-policy/ for instructions
@@ -58,7 +62,7 @@ config = {
         database: {
             client: 'sqlite3',
             connection: {
-                filename: path.join(__dirname, '/content/data/ghost-dev.db')
+                filename: path.join(__dirname, '/data/ghost-dev.db')
             },
             debug: false
         },
@@ -73,7 +77,7 @@ config = {
         // #### Paths
         // Specify where your content directory lives
         paths: {
-            contentPath: path.join(__dirname, '/content/')
+            contentPath: path.join(process.env.GHOST_CONTENT, '/')
         }
     },
 
@@ -87,7 +91,7 @@ config = {
         database: {
             client: 'sqlite3',
             connection: {
-                filename: path.join(__dirname, '/content/data/ghost-test.db')
+                filename: path.join(__dirname, '/data/ghost-test.db')
             },
             pool: {
                 afterCreate: function (conn, done) {

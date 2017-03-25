@@ -26,6 +26,10 @@ if [[ -d $APP_ROOT_DIR/$APP_ASSET_DIR ]]; then
     chown -R nginx:nginx $APP_ROOT_DIR/$APP_ASSET_DIR
 fi
 
+if [[ -d ${GHOST_SOURCE}/core ]]; then
+    chown -R nginx:nginx ${GHOST_SOURCE}/core
+fi
+
 # ------- SSL CERT
 
 if ! grep -q "export TERM" ~/.bashrc; then
