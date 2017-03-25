@@ -1,47 +1,8 @@
-
 # Base image
-FROM ubuntu:trusty
+FROM ghost
 
-ENV ROOT_DIR $GHOST_ROOT_DIR
-ENV NVM_DIR $GHOST_NVM_DIR
-ENV NODE_VERSION $GHOST_NODE_VERSION
+ENV GHOST_SOURCE $GHOST_SOURCE
+ENV GHOST_CONTENT $GHOST_CONTENT
+WORKDIR $GHOST_SOURCE
 
-WORKDIR $GHOST_ROOT_DIR
-
-# Update the OS packages list and will install some libraries
-RUN apt-get update -qq && apt-get install -y build-essential curl wget libssl-dev git python sqlite3
-
-# Add in ghost user, add as a sudoer, and delete password
-RUN useradd --create-home --skel /etc/skel --system ghost -U \
-    && groupmod -g $SHARED_GID ghost \
-    && usermod -u $SHARED_UID -aG sudo ghost \
-    && passwd -d ghost
-
-# Ensure user dir is owned
-RUN chown $SHARED_UID:$SHARED_GID $GHOST_USER_DIR
-
-# Create symbolic link for git submodules to work properly
-RUN ln -sf $GHOST_USER_DIR/.git $GHOST_ROOT_DIR/../.git
-
-# All commands below will be run by ghost user
-USER ghost
-
-# Install NVM and node
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.4/install.sh | bash \
-    && [ -s "$GHOST_NVM_DIR/nvm.sh" ] && . "$GHOST_NVM_DIR/nvm.sh" \
-    && nvm install $GHOST_NODE_VERSION \
-    && nvm alias default $GHOST_NODE_VERSION \
-    && nvm use default
-
-# Copy over ghost service script
-COPY $DOCKER_ROOT/containers/ghost/ghost_service.sh /etc/init.d/ghost
-
-# copy over the script that is run by the container
-COPY $DOCKER_ROOT/containers/ghost/ghost_cmd.sh $GHOST_USER_DIR/
-
-# Copy over ghost config
-COPY $DOCKER_ROOT/containers/ghost/config.js $GHOST_ROOT_DIR/config.js
-
-# Define the script we want run once the container boots
-# Use the "exec" form of CMD so our script shuts down gracefully on SIGTERM (i.e. `docker stop`)
-CMD [ "$GHOST_USER_DIR/ghost_cmd.sh" ]
+CMD ["npm", "start", "--$ENVIRONMENT"]
