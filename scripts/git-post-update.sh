@@ -3,8 +3,10 @@
 echo 'Changing to root directory'
 cd ..
 
+WORK_DIR=$(pwd)
+
 echo 'Updating submodules'
-git submodule update --recursive
+git --git-dir=$WORK_DIR/.git --work-tree=$WORK_DIR submodule update --init --recursive
 
 echo 'Building containers'
 bash build.sh
