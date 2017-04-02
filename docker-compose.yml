@@ -19,6 +19,10 @@ services:
             - "./.docker/containers/app/config.js:${APP_ROOT_DIR}/config.js"
             - "./.docker/containers/app/clientConfig.js:${APP_ROOT_DIR}/client/clientConfig.js"
 
+        # Resolves hostname for server side rendering
+        # Needed for production where we need a valid SSL cert
+        dns: 8.8.8.8
+
         # expose the port we configured for the app
         ports:
             - "${APP_PORT}"
