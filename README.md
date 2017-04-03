@@ -46,7 +46,7 @@ ufw limit ssh
 vi /etc/ssh/sshd_config
 #PermitRootLogin no
 
-# Create Swap file - Webpack uses
+# Create Swap file
 sudo fallocate -l 4G /swapfile
 sudo chmod 600 /swapfile
 sudo mkswap /swapfile
