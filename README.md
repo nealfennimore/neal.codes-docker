@@ -62,3 +62,34 @@ sudo sysctl vm.vfs_cache_pressure=50
 echo 'vm.vfs_cache_pressure=50' >> /etc/sysctl.conf
 
 ```
+
+### Cloning Repo
+
+When SSH'ed into the Digital Ocean server:
+
+```sh
+cd /home/docker
+git clone --recursive git@github.com:nealfennimore/neal.codes-docker.git docker
+cd docker # /home/docker/docker
+bash scripts/init.sh
+```
+
+### SSH Config
+Add an SSH alias in your local machine `~/.ssh/config`:
+
+```sh
+Host neal.codes
+	HostName neal.codes # Or your Digital Ocean IP
+	User docker
+	IdentityFile ~/.ssh/id_rsa
+```
+
+#### Setting up push-to-update
+You can now push to production and have the entire application rebuilt automatically utilizing git post-update hooks.
+
+On your local machine:
+```sh
+git remote add production ssh://neal.codes/home/docker/docker
+git push production
+```
+
