@@ -45,6 +45,7 @@ ufw limit ssh
 # Disable root login
 vi /etc/ssh/sshd_config
 #PermitRootLogin no
+service sshd restart
 
 # Create Swap file
 sudo fallocate -l 4G /swapfile
