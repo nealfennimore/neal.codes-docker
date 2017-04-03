@@ -26,7 +26,7 @@ const config = {
         FONT_STYLES: /fonts\/style\.scss$/
     },
     webpack: {
-        cssModuleName: `[name]-[local]__${buildVersion}`,
+        cssModuleName: `[name]-[local]__${buildVersion.slice(5)}`,
         hmrPath: '$APP_HMR_PATH'
     }
 };
